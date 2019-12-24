@@ -14,7 +14,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource
+ * @ApiResource(
+ *  normalizationContext={"groups"={"users_read"}}
+ * )
  * @UniqueEntity("email", message="email déja use")
  */
 class User implements UserInterface
@@ -23,13 +25,13 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"customers_read", "facture_read", "factures_subresource"})
+     * @Groups({"customers_read", "facture_read", "factures_subresource", "users_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"customers_read", "facture_read", "factures_subresource"})
+     * @Groups({"customers_read", "facture_read", "factures_subresource", "users_read"})
      * @Assert\NotBlank(message="champ email requis")
      * @Assert\Email(message="email type requis")
      */
@@ -49,14 +51,14 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "facture_read", "factures_subresource"})
+     * @Groups({"customers_read", "facture_read", "factures_subresource", "users_read"})
      * @Assert\NotBlank(message="champ firstName requis")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "facture_read", "factures_subresource"})
+     * @Groups({"customers_read", "facture_read", "factures_subresource", "users_read"})
      * @Assert\NotBlank(message="champ email requis")
      */
     private $lastName;
