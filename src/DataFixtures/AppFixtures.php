@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
      * L'encodeur du mot de passe
      *
      * @var UserPasswordencoderInterface
-     */ 
+     */
     private $encoder;
 
     public function __construct(UserPasswordEncoderInterface $encoder)
@@ -28,11 +28,11 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        
+
         // $product = new Product();
         // $manager->persist($product);
 
-        for ($u=0; $u < 10 ; $u++) { 
+        for ($u = 0; $u < 10; $u++) {
             $user = new User();
 
             $hashPassword = $this->encoder->encodePassword($user, "password");
@@ -40,29 +40,30 @@ class AppFixtures extends Fixture
             $number = 1;
 
             $user->setFirstName($faker->firstName())
-                 ->setLastName($faker->lastName())
-                 ->setEmail($faker->email)
-                 ->setPassword($hashPassword);
+                ->setLastName($faker->lastName())
+                ->setEmail($faker->email)
+                ->setPassword($hashPassword)
+                ->setRoles(['ROLE_USER']);
 
-                 $manager->persist($user);   
-        
-            for ($i=0; $i < rand(5, 20); $i++) { 
+            $manager->persist($user);
+
+            for ($i = 0; $i < rand(5, 20); $i++) {
                 $customer = new Customer();
                 $customer->setFirstName($faker->firstName())
-                        ->setLastName($faker->lastName())
-                        ->setEmail($faker->email)
-                        ->setCompany($faker->company)
-                        ->setUser($user);
-                        
-                $manager->persist($customer);         
-            
-                for ($j=0; $j < rand(3,10) ; $j++) { 
+                    ->setLastName($faker->lastName())
+                    ->setEmail($faker->email)
+                    ->setCompany($faker->company)
+                    ->setUser($user);
+
+                $manager->persist($customer);
+
+                for ($j = 0; $j < rand(3, 10); $j++) {
                     $facture = new Facture();
                     $facture->setAmount($faker->randomFloat(2, 250, 5000))
-                            ->setSendAt($faker->dateTimeBetween('-1 years'))
-                            ->setStatus($faker->randomElement(['Envoyé', 'réglé', 'Annuler']))
-                            ->setCustomer($customer)
-                            ->setNumber($number);
+                        ->setSendAt($faker->dateTimeBetween('-1 years'))
+                        ->setStatus($faker->randomElement(['Envoyé', 'réglé', 'Annuler']))
+                        ->setCustomer($customer)
+                        ->setNumber($number);
                     $manager->persist($facture);
                     $number++;
                 }

@@ -94,9 +94,10 @@ class Customer
      * @Groups({"facture_read","customers_read"})
      * @return float
      */
-    public function getTotalAmount() : float {
-        
-        return array_reduce($this->factures->toArray(), function($total, $facture){
+    public function getTotalAmount(): float
+    {
+
+        return array_reduce($this->factures->toArray(), function ($total, $facture) {
             return $total + $facture->getAmount();
         }, 0);
     }
@@ -106,11 +107,11 @@ class Customer
      * @Groups({"facture_read", "customers_read"})
      * @return float
      */
-    public function getUnpaidAmount(): float 
+    public function getUnpaidAmount(): float
     {
-        return array_reduce($this->factures->toArray(), function($total, $facture) {
+        return array_reduce($this->factures->toArray(), function ($total, $facture) {
             return $total + ($facture->getStatus() === "réglé" || $facture->getStatus() === "Annuler" ? 0 : $facture->getAmount());
-        }, 0);        
+        }, 0);
     }
 
     public function getId(): ?int
