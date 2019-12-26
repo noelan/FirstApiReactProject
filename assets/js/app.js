@@ -1,31 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { HashRouter, Route, Switch } from "react-router-dom";
-import Navbar from "./components/Navvar";
+import { HashRouter, Route, Switch, withRouter } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
+import AuthContext from "./contexts/AuthContext";
 import CustomersPage from "./pages/CustomersPage";
 import FacturesPage from "./pages/FacturesPage";
 import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import authAPI from "./services/authAPI";
+
 // any CSS you require will output into a single css file (app.css in this case)
 require("../css/app.css");
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
-
-console.log("Hello Webpack Encore! Edit me in assets/js/app.js");
+authAPI.setup();
 
 const App = () => {
-  return (
-    <HashRouter>
-      <Navbar />
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    authAPI.isAuthenticated()
+  );
 
-      <main className="container pt-5">
-        <Switch>
-          <Route path="/customers" component={CustomersPage} />
-          <Route path="/factures" component={FacturesPage} />
-          <Route path="/" component={HomePage} />
-        </Switch>
-      </main>
-    </HashRouter>
+  const NavbarWithRouter = withRouter(Navbar);
+
+  const contextValue = {
+    isAuthenticated: isAuthenticated,
+    setIsAuthenticated: setIsAuthenticated
+  };
+
+  return (
+    <AuthContext.Provider value={contextValue}>
+      <HashRouter>
+        <NavbarWithRouter />
+
+        <main className="container pt-5">
+          <Switch>
+            <Route path="/login" component={LoginPage} />
+
+            <PrivateRoute path="/customers" component={CustomersPage} />
+
+            <PrivateRoute path="/factures" component={FacturesPage} />
+
+            <Route path="/" component={HomePage} />
+          </Switch>
+        </main>
+      </HashRouter>
+    </AuthContext.Provider>
   );
 };
 

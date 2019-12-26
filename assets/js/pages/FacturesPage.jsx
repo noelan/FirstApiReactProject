@@ -1,7 +1,6 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
-import axios from "axios";
-import moment from "moment";
 import facturesAPI from "../services/facturesAPI";
 
 const STATUS_CLASSES = {
