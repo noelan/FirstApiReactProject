@@ -21,14 +21,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      }
  *  },
  *  itemOperations={"GET", "PUT", "DELETE", "increment"={
-        * "method"="post", 
-        * "path"="/factures/{id}/increment",
-        * "controller"="App\Controller\FactureIncrementController",
-        * "openapi_context"={"summary"="haha sa incremente","description"="description"}
-        *   }
-        *},
+ * "method"="post", 
+ * "path"="/factures/{id}/increment",
+ * "controller"="App\Controller\FactureIncrementController",
+ * "openapi_context"={"summary"="haha sa incremente","description"="description"}
+ *   }
+ *},
  *  attributes = {
- *      "pagination_enabled"=true,     
+ *      "pagination_enabled"=false,     
  *      "pagination_items_per_page"=40,
  *      "order": {"sendAt":"desc"}
  *  },

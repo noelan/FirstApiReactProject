@@ -31,12 +31,13 @@ class FactureChronoSubscriber implements EventSubscriberInterface
 
     public function setChronoForFacture(ViewEvent $event)
     {
-        $user = $this->security->getUser();
-        $nextChrono = $this->repository->findNextChrono($user);
+
         $facture = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
         if ($facture instanceof Facture && $method == "POST") {
+            $user = $this->security->getUser();
+            $nextChrono = $this->repository->findNextChrono($user);
             $facture->setNumber($nextChrono);
 
             if (empty($facture->getSendAt)) {
