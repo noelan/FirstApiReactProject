@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import facturesAPI from "../services/facturesAPI";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import TableLoader from "../components/loaders/table.loader";
 
 const STATUS_CLASSES = {
   réglé: "success",
@@ -14,12 +16,15 @@ const InvoicesPage = props => {
   const [invoices, setInvoices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchInvoices = async () => {
     try {
       const data = await facturesAPI.findAll();
       setInvoices(data);
+      setLoading(false);
     } catch (error) {
+      toast.error("Erreur lors du chargement des factures !");
       console.log(error.response);
     }
   };
@@ -45,7 +50,9 @@ const InvoicesPage = props => {
 
     try {
       await facturesAPI.delete(id);
+      toast.success("La facture a bien été supprimée");
     } catch (error) {
+      toast.error("Une erreur est survenue");
       console.log(error.reponse);
       setInvoices(originalInvoices);
     }
@@ -99,46 +106,53 @@ const InvoicesPage = props => {
             <th></th>
           </tr>
         </thead>
-        <tbody>
-          {paginatedInvoices.map(invoice => (
-            <tr key={invoice.id}>
-              <td>
-                <a href="#">{invoice.number}</a>
-              </td>
-              <td>
-                {invoice.customer.firstName} {invoice.customer.lastName}
-              </td>
-              <td className="text-center">{formatDate(invoice.sendAt)}</td>
-              <td className="text-center">
-                {invoice.amount.toLocaleString()}€
-              </td>
-              <td className="text-center">
-                <span
-                  className={
-                    "btn btn-sm badge-" + STATUS_CLASSES[invoice.status]
-                  }
-                >
-                  {invoice.status}
-                </span>
-              </td>
-              <td>
-                <Link
-                  to={"/factures/" + invoice.id}
-                  className="btn btn-primary btn-sm mr-1"
-                >
-                  Editer
-                </Link>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDelete(invoice.id)}
-                >
-                  Supprimer
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+
+        {!loading && (
+          <tbody>
+            {paginatedInvoices.map(invoice => (
+              <tr key={invoice.id}>
+                <td>
+                <Link to={"/customers/" + customer.id }>
+                    {customer.firstName} {customer.lastName}
+                  </Link>
+                </td>
+                <td>
+                  {invoice.customer.firstName} {invoice.customer.lastName}
+                </td>
+                <td className="text-center">{formatDate(invoice.sendAt)}</td>
+                <td className="text-center">
+                  {invoice.amount.toLocaleString()}€
+                </td>
+                <td className="text-center">
+                  <span
+                    className={
+                      "btn btn-sm badge-" + STATUS_CLASSES[invoice.status]
+                    }
+                  >
+                    {invoice.status}
+                  </span>
+                </td>
+                <td>
+                  <Link
+                    to={"/factures/" + invoice.id}
+                    className="btn btn-primary btn-sm mr-1"
+                  >
+                    Editer
+                  </Link>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDelete(invoice.id)}
+                  >
+                    Supprimer
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
+
+      {loading && <TableLoader />}
 
       <Pagination
         currentPage={currentPage}

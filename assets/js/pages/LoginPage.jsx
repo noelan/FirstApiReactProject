@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import AuthContext from "../contexts/AuthContext";
 import authAPI from "../services/authAPI";
 import Field from "../components/forms/Field.jsx";
+import { toast } from "react-toastify";
 
 const LoginPage = ({ history }) => {
   const { setIsAuthenticated } = useContext(AuthContext);
@@ -27,9 +28,11 @@ const LoginPage = ({ history }) => {
       await authAPI.authenticate(credentials);
       setError("");
       setIsAuthenticated(true);
+      toast.success("Vous êtes désormais connectés");
       history.replace("/customers");
     } catch (error) {
       setError("Les information ne corespondent pas !");
+      toast.error("une erreur est survenue");
     }
   };
 

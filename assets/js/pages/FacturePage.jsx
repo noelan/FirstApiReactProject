@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import customersAPI from "../services/customersAPI";
 import Axios from "axios";
 import facturesAPI from "../services/facturesAPI";
+import { toast } from "react-toastify";
 
 const FacturePage = ({ history, match }) => {
   const { id = "new" } = match.params;
@@ -36,7 +37,7 @@ const FacturePage = ({ history, match }) => {
 
       if (!invoice.customer) setInvoice({ ...invoice, customer: data[0].id });
     } catch (error) {
-      console.log(error.response);
+      toast.error("Impossible de charger les clients");
       history.replace("/factures");
     }
   };
@@ -48,6 +49,7 @@ const FacturePage = ({ history, match }) => {
       setInvoice({ amount, status, customer: customer.id });
       console.log(data);
     } catch (error) {
+      toast.error("Impossible de charger la facture demandée");
       console.log(error.response);
     }
   };
@@ -70,8 +72,10 @@ const FacturePage = ({ history, match }) => {
     try {
       if (editing) {
         await facturesAPI.edit(id, invoice);
+        toast.success("La facture a bien été modifiée");
       } else {
         await facturesAPI.create(invoice);
+        toast.success("La facture a bien été créer");
       }
       history.replace("/factures");
     } catch ({ response }) {
@@ -82,6 +86,7 @@ const FacturePage = ({ history, match }) => {
           apiErrors[violation.propertyPath] = violation.message;
         });
         setErrors(apiErrors);
+        toast.error("Formulaire a des erreurs");
       }
     }
   };
