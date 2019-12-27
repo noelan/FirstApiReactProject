@@ -65,7 +65,7 @@ class Customer
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "facture_read"})
      * @Assert\NotBlank(message="le email est obligatoire")
-     * @Assert\Length(min=3, minMessage="Le prénom doit faire mini 5 caractere et max 210", max="255", maxMessage="max 255")
+     * @Assert\Length(min=3, minMessage="Le email doit faire mini 5 caractere et max 210", max="255", maxMessage="max 255")
      * @Assert\Email(message="le format de l'email doit etre valide")
      */
     private $email;
