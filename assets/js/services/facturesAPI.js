@@ -1,31 +1,30 @@
 import axios from "axios";
 import Axios from "axios";
+import { FACTURES_API } from "../config";
 
 function findAll() {
   return axios
-    .get("http://localhost:8000/api/factures")
+    .get(FACTURES_API)
     .then(response => response.data["hydra:member"]);
 }
 
 function deleteFacture(id) {
-  return axios.delete("http://localhost:8000/api/factures/" + id);
+  return axios.delete(FACTURES_API + "/" + id);
 }
 
 function findById(id) {
-  return Axios.get("http://localhost:8000/api/factures/" + id).then(
-    response => response.data
-  );
+  return Axios.get(FACTURES_API + "/" + id).then(response => response.data);
 }
 
 function edit(id, invoice) {
-  return Axios.put("http://localhost:8000/api/factures/" + id, {
+  return Axios.put(FACTURES_API + "/" + id, {
     ...invoice,
     customer: `/api/customers/${invoice.customer}`
   });
 }
 
 function create(invoice) {
-  return Axios.post("http://localhost:8000/api/factures", {
+  return Axios.post(FACTURES_API, {
     ...invoice,
     customer: `/api/customers/${invoice.customer}`
   });

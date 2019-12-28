@@ -111,11 +111,7 @@ const InvoicesPage = props => {
           <tbody>
             {paginatedInvoices.map(invoice => (
               <tr key={invoice.id}>
-                <td>
-                <Link to={"/customers/" + customer.id }>
-                    {customer.firstName} {customer.lastName}
-                  </Link>
-                </td>
+                <td></td>
                 <td>
                   {invoice.customer.firstName} {invoice.customer.lastName}
                 </td>
